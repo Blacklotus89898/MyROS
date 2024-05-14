@@ -1,5 +1,13 @@
 # MyROS
 
+Todo: 
+- esp8266 rosserial regular and tcp
+- dc motor control
+- servo control
+- multiple ros with micro ros and ros1
+- research ros2
+- stm32 ros integration
+
 useful cmd:
 
 roscd <package name>
