@@ -1,0 +1,8 @@
+1. Research and Planning (list and save interesting sources and documentation)
+2. Designing test for success / ignore failing case (track erros, mistatkes, when succes log into iteration)
+3. Find alternative implementation + Compare (branch out into different approaches)
+4. Perform isolation test
+5. Review and traceback if unsatisfied
+6. Optimization and refining (can branch out into multiple versions)
+7. Package the solution for presentation (get ready for code review, design review and further testing)
+8. Finalize documentation + (list all instruction on program execution and dependencies in README.md)
