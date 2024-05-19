@@ -1,0 +1,8 @@
+Project Manager: management
+
+Division Lead: technical support + management
+
+Members:
+    System Manager/ Team Lead / Capitain: communicate with Lead (prepare question list, ask for permission, testing, QA)
+    Scribe: doc + meeting minutes 
+    Setter (verifies all the installation process and setup to save time for everyone and avoid repetitive debugging )
