@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Terminal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #output {
+            flex: 1;
+            padding: 10px;
+            background-color: #000;
+            color: #0f0;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        #input {
+            padding: 10px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            font-family: monospace;
+            font-size: 16px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <input id="input" type="text" autofocus placeholder="Type a command and press Enter...">
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('input');
+        const socket = new WebSocket('ws://localhost:3000');
+
+        // Handle WebSocket open event
+        socket.addEventListener('open', () => {
+            console.log('WebSocket connection established');
+        });
+
+        // Handle messages from the server
+        socket.addEventListener('message', (event) => {
+            output.textContent += event.data + '\n';
+            output.scrollTop = output.scrollHeight; // Scroll to the bottom
+        });
+
+        // Handle WebSocket errors
+        socket.addEventListener('error', (error) => {
+            console.error('WebSocket error:', error);
+        });
+
+        // Handle WebSocket close event
+        socket.addEventListener('close', () => {
+            console.log('WebSocket connection closed');
+        });
+
+        // Handle input submission
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const command = input.value;
+                socket.send(command); // Send the command to the backend
+                input.value = ''; // Clear the input field
+            }
+        });
+
+        // Focus on the input field
+        input.focus();
+    </script>
+</body>
+</html>
+
