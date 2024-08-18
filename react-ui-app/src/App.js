@@ -1,8 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import RosComponent from './ros.jsx'
+// import RosComponent from './ros.jsx'
+import CameraFeed64 from './rosCameraController.jsx';
+import VideoFeed from './webrtcClient.jsx';
 import {RosProvider} from './rosContext.js'
 import RosTopicController from './rosTopicController.jsx'
+import Terminal from './terminal.jsx'
 
 function App() {
   return (
@@ -22,8 +25,11 @@ function App() {
             Learn React
           </a>
         </header>
-        <RosComponent/>
+        <CameraFeed64></CameraFeed64>
+        <VideoFeed></VideoFeed>
+        {/* <RosComponent/> */}
         <RosTopicController/>
+       <Terminal></Terminal>
       </div>
     </RosProvider>
   );
