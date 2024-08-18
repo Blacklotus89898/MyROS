@@ -8,24 +8,34 @@ The build tool is catkin
 Commonly used language are Python and Cpp with CMakelists.txt and XML config files
 Hardware components testted: arduino uno, Tensys 4.0, Esp8266, Nvidia Jeston Nano, Thinkpad T490s
 
-Dependencies:
+## Dependencies:
 - System requires native Ubuntu 20.04
 - Ros-noetic installed on the system and added to source to the environment
-- Use catkin build from the root workspace directory to rebuild the executables
+- Use `catkin build` from the root workspace directory to rebuild the executables
 
-Todo: 
-- UI in react with rosbridge //development
-- esp8266 rosserial regular and tcp //achieved
-- dc motor control
-- servo control
-- multiple ros with micro ros and ros1
-- research ros2
-- stm32 ros integration
+## Project Structure:
+- Documentation
+- react-ui-app: user interface and control
+- my_controller: controller nodes for starting and stoping processes
+- my_script: launch and script files
+- my_embedded: embedded system code
+- my_sandbox: experiemental environment
+
+## Todo
+- [ ]  UI in react with rosbridge //development
+- [ ] esp8266 rosserial regular and tcp //achieved
+- [ ] dc motor control
+- [ ] servo control
+- [ ] multiple ros with micro ros and ros1
+- [ ] research ros2
+- [ ] stm32 ros integration
+- [ ] CI/CD 
+- [ ] Docker container
 
 Running the project:
 TO BE COMOPLETED
 
-ROS Commands:
+## ROS Commands:
 - roscd <package name>
 - rosed <target_edit_file_name>
 - rostopic list
@@ -38,7 +48,7 @@ ROS Commands:
 - rosrun rosserial_python serial_node.py /dev/ttyUSB0
 - rosrun rosserial_python serial_node.py tcp
 
-Catkin Commands:
+## Catkin Commands:
 - catkin_make != catkin build
 - catkin_create_pkg 
 - catkin_make install (for building rosserial libraries in firmware)
