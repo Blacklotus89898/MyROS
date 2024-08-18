@@ -1,33 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
-// import RosComponent from './ros.jsx'
 import CameraFeed64 from './rosCameraController.jsx';
 import VideoFeed from './webrtcClient.jsx';
 import {RosProvider} from './rosContext.js'
 import RosTopicController from './rosTopicController.jsx'
+import RosLineGraph from './rosGraph.jsx'
+import RosHistogram from './rosHistogram.jsx'
+import RosTopicSubscriber from './rosTopicSubscriber.jsx';
 import Terminal from './terminal.jsx'
+import ThreeDPlot from './ros3dplot.jsx';
 
 function App() {
   return (
     <RosProvider>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <ThreeDPlot></ThreeDPlot>
+        <RosTopicSubscriber></RosTopicSubscriber>
+       <RosLineGraph></RosLineGraph>
+       <RosHistogram></RosHistogram>
         <CameraFeed64></CameraFeed64>
         <VideoFeed></VideoFeed>
-        {/* <RosComponent/> */}
         <RosTopicController/>
        <Terminal></Terminal>
       </div>

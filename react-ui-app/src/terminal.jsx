@@ -1,4 +1,5 @@
 // src/Terminal.js
+// or just publish and subscribe ot the terminal node controller
 import React, { useState, useEffect, useRef } from 'react';
 
 const Terminal = () => {

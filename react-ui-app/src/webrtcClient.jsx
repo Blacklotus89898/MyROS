@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-// need improvement, only functional in chrome
+// need improvement, only functional in chrome, require webrtc_server.py
 const waitForIceGatheringComplete = (pc) => {
   return new Promise((resolve) => {
     const checkState = () => {
@@ -17,7 +17,7 @@ const waitForIceGatheringComplete = (pc) => {
   });
 };
 
-const CameraBox = () => {
+const VideoFeed = () => {
   const [pc, setPc] = useState(null);
   const [error, setError] = useState(null);
   const videoElementRef = useRef(null);
@@ -25,7 +25,6 @@ const CameraBox = () => {
   const deviceId = 0;
 
   useEffect(() => {
-    // Cleanup function to stop the video when the component unmounts
     return () => {
       stop();
     };
@@ -40,7 +39,6 @@ const CameraBox = () => {
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
 
-      // Wait for ICE gathering to complete
       await waitForIceGatheringComplete(pc);
 
       const offerData = { sdp: pc.localDescription?.sdp, type: pc.localDescription?.type };
@@ -95,7 +93,7 @@ const CameraBox = () => {
 
   return (
     <div>
-      <h2>Camera Feed</h2>
+      <h2>Camera Feed Webrtc</h2>
       <video
         ref={videoElementRef}
         autoPlay
@@ -108,4 +106,4 @@ const CameraBox = () => {
   );
 };
 
-export default CameraBox;
+export default VideoFeed;
