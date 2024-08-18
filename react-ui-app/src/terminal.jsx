@@ -1,4 +1,4 @@
-// src/Terminal.js
+// requires the server.js running 
 // or just publish and subscribe ot the terminal node controller
 import React, { useState, useEffect, useRef } from 'react';
 

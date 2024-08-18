@@ -7,6 +7,7 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
     const { ros } = useRos();
     const [frequencyData, setFrequencyData] = useState({});
     const [listener, setListener] = useState(null);
+    const [tpc, setTopic] = useState(topic);
 
     useEffect(() => {
         if (ros) {
@@ -27,7 +28,7 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
 
         const newListener = new ROSLIB.Topic({
             ros: ros,
-            name: topic,
+            name: tpc,
             messageType: type,
         });
 
@@ -109,11 +110,11 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
     const downloadCSV = () => {
         const csvRows = [];
         csvRows.push(['Value', 'Frequency']); // Header row
-    
+
         Object.entries(frequencyData).forEach(([value, frequency]) => {
-          csvRows.push([value, frequency]);
+            csvRows.push([value, frequency]);
         });
-    
+
         const csvContent = csvRows.map(row => row.join(',')).join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -122,11 +123,19 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
         a.download = 'histogram_data.csv';
         a.click();
         URL.revokeObjectURL(url);
-      };
+    };
 
     return (
         <div style={{ border: '1px solid black', padding: '10px' }}>
             <h2>Histogram</h2>
+            <h3>
+                <input
+                    type="text"
+                    placeholder="Topic name"
+                    value={tpc}
+                    onChange={(e) => setTopic(e.target.value)}
+                />
+            </h3>
             <canvas ref={canvasRef} width={600} height={400} style={{ border: '1px solid black' }} />
             <button onClick={downloadCSV} style={{ marginTop: '10px' }}>Download CSV</button>
         </div>
