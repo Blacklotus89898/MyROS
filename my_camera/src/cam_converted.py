@@ -8,45 +8,38 @@ import argparse
 
 class VideoCamNode:
     def __init__(self):
-        #argument parser
         parser = argparse.ArgumentParser(description='ROS Node with command-line arguments.')
         parser.add_argument('--id', type=int, default=0, help='ID to use for this node')
         args = parser.parse_args()
-        #id = rospy.get_param('id', 0) //param can only be acquired after init_node
-        id = args.id 
+        id = args.id
         rospy.init_node('cam.py'+ str(id), anonymous=False)
 
-        # Publisher to publish video frames
-        self.image_pub = rospy.Publisher('/cam.py'+str(id), Image, queue_size=10)
-
-        # Initialize the CvBridge
+        self.image_pub = rospy.Publisher('/camera_frames_'+str(id), Image, queue_size=10)
         self.bridge = CvBridge()
-
-        # Open the video capture
         self.cap = cv2.VideoCapture(id)
 
-        # Check if the video capture opened successfully
         if not self.cap.isOpened():
             rospy.logerr("Error: Could not open video capture.")
             rospy.signal_shutdown("Could not open video capture")
 
     def run(self):
         while not rospy.is_shutdown():
-            # Capture frame-by-frame
             ret, frame = self.cap.read()
             if not ret:
                 rospy.logerr("Error: Could not read frame.")
                 continue
 
-            # Convert OpenCV image to ROS image message
+            frame_resized = cv2.resize(frame, (640, 480))  # Ensure this matches the frontend expectation
+            rgb_frame = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
+
             try:
-                #ros_image = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
-                ros_image = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
+                # Convert the frame to ROS Image message with encoding "rgb8"
+                ros_image = self.bridge.cv2_to_imgmsg(rgb_frame, encoding="rgb8")
+                rospy.loginfo(f"Publishing image with width: {ros_image.width}, height: {ros_image.height}, data length: {len(ros_image.data)}")
                 self.image_pub.publish(ros_image)
             except CvBridgeError as e:
                 rospy.logerr("CvBridgeError: %s" % str(e))
 
-            # Display the frame
             cv2.imshow('Video Feed', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -60,4 +53,3 @@ if __name__ == "__main__":
         node.run()
     except rospy.ROSInterruptException:
         pass
-
