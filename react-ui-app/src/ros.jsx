@@ -1,40 +1,18 @@
-// src/RosComponent.js
 import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
-
+import {useRos} from './rosContext';
+// To be remade
 const RosComponent = () => {
-  const [ros, setRos] = useState(null);
   const [message, setMessage] = useState('');
-
-  const [me, setMe] = useState('');
+  const {ros }= useRos();
 
   //At the start
   useEffect(() => {
-    // Initialize the ROS connection
-    const rosInstance = new ROSLIB.Ros({
-      url: 'ws://localhost:9090', // Replace with your ROS master WebSocket URL
-    });
-
-    rosInstance.on('connection', () => {
-      console.log('Connected to ROS!');
-    });
-
-    rosInstance.on('error', (error) => {
-      console.error('Error connecting to ROS:', error);
-    });
-
-    rosInstance.on('close', () => {
-      console.log('Connection to ROS closed.');
-    });
-
-    setRos(rosInstance);
-    console.log(rosInstance);
-    console.dir(rosInstance);
-    setMe(JSON.stringify(rosInstance));
+    if (ros != null) {
 
     // Subscribe to a ROS topic
     const listener = new ROSLIB.Topic({
-      ros: rosInstance,
+      ros: ros,
       name: '/chatter', // Replace with your ROS topic name
       messageType: 'std_msgs/String', // Replace with your ROS message type
     });
@@ -43,13 +21,8 @@ const RosComponent = () => {
       console.log('Received message:', msg);
       setMessage(msg.data);
     });
-
-    // Cleanup on component unmount
-    return () => {
-      listener.unsubscribe();
-      rosInstance.close();
-    };
-  }, []);
+    }
+  }, [ros]);
 
   return (
     <div>
