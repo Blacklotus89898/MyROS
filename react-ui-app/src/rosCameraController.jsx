@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ROSLIB from 'roslib';
 import { useRos } from './rosContext';
+// import RosTopicForm from './RosTopicForm'; // Import the RosTopicForm component
+import RosTopicForm from './rosTopicForm.jsx';
 
 const CameraFeed64 = () => {
   const [imageSrc, setImageSrc] = useState(null);
+  const [topicName, setTopicName] = useState('/camera_frames_0');
+  const [messageType, setMessageType] = useState('std_msgs/String');
   const { ros } = useRos();
   const canvasRef = useRef(null);
 
@@ -11,8 +15,8 @@ const CameraFeed64 = () => {
     if (ros) {
       const topic = new ROSLIB.Topic({
         ros: ros,
-        name: '/camera_frames_0',
-        messageType: 'std_msgs/String',
+        name: topicName,
+        messageType: messageType,
       });
 
       topic.subscribe((message) => {
@@ -30,7 +34,7 @@ const CameraFeed64 = () => {
         topic.unsubscribe();
       };
     }
-  }, [ros]);
+  }, [ros, topicName, messageType]);
 
   const captureImage = () => {
     if (imageSrc && canvasRef.current) {
@@ -52,16 +56,28 @@ const CameraFeed64 = () => {
     }
   };
 
+  // Callback function to handle the form submission
+  const handleFormSubmit = ({ topicName, messageType }) => {
+    setTopicName(topicName);
+    setMessageType(messageType);
+  };
+
   return (
-    <div>
+    <div style={{ border: '1px solid black', padding: '10px', display: 'flex', flexDirection: 'column', height: '100%' }}>
       <h2>Camera Feed Base64</h2>
-      {imageSrc ? <img src={imageSrc} alt="Camera Feed" style={{ width: '640px', height: '480px', border: '1px solid black' }} /> : <p>Loading...</p>}
+      
+      {/* Use RosTopicForm component */}
+      <RosTopicForm onMessageReceived={handleFormSubmit} />
+
+      {imageSrc ? (
+        <img src={imageSrc} alt="Camera Feed" style={{ width: '100%', height: 'auto', border: '1px solid black' }} />
+      ) : (
+        <p>Loading...</p>
+      )}
       <canvas ref={canvasRef} style={{ display: 'none' }} />
-      <h3>
-        <button onClick={captureImage} style={{ display: 'block', marginTop: '10px' }}>
-          Capture Image
-        </button>
-      </h3>
+      <button onClick={captureImage} style={{ marginTop: '10px' }}>
+        Capture Image
+      </button>
     </div>
   );
 };

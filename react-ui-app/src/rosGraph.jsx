@@ -7,7 +7,7 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
     const { ros } = useRos();
     const [dataPoints, setDataPoints] = useState([]);
     const [listener, setListener] = useState(null);
-
+    const [tpc, setTopic] = useState(topic);
     useEffect(() => {
         if (ros) {
             handleListener();
@@ -27,7 +27,7 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
 
         const newListener = new ROSLIB.Topic({
             ros: ros,
-            name: topic,
+            name: tpc,
             messageType: type,
         });
 
@@ -35,7 +35,7 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
             if (msg && Array.isArray(msg.data)) {
                 setDataPoints((prevData) => {
                     const newData = [...prevData, ...msg.data];
-                    return newData.slice(-100); // Limit the number of points for simplicity
+                    return newData.slice(-10);
                 });
             }
         });
@@ -50,10 +50,8 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
         const graphWidth = width - 2 * padding;
         const graphHeight = height - 2 * padding;
 
-        // Clear the canvas
         ctx.clearRect(0, 0, width, height);
 
-        // Draw axis
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -62,7 +60,6 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
         ctx.lineTo(width - padding, height - padding);
         ctx.stroke();
 
-        // Draw grid lines
         ctx.strokeStyle = '#ddd';
         ctx.lineWidth = 1;
         const gridStep = 50;
@@ -95,7 +92,6 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
             const x = padding + index * xScale;
             const y = height - padding - (point - minValue) * yScale;
 
-            // Ensure point is within bounds
             const boundedY = Math.max(padding, Math.min(y, height - padding));
 
             if (index === 0) {
@@ -104,21 +100,18 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
                 ctx.lineTo(x, boundedY);
             }
 
-            // Draw data point value
             ctx.fillStyle = '#000';
             ctx.font = '10px Arial';
             const text = point.toFixed(2);
 
-            // Adjust text placement
             const textWidth = ctx.measureText(text).width;
             const textX = Math.min(Math.max(x + 5, padding), width - padding - textWidth);
             const textY = Math.max(Math.min(boundedY - 5, height - padding - 5), padding + 10);
 
-            ctx.fillText(text, textX, textY); // Display value slightly offset from the point
+            ctx.fillText(text, textX, textY);
         });
         ctx.stroke();
 
-        // Draw X and Y axis labels
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'center';
@@ -132,7 +125,7 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
 
     const downloadCSV = () => {
         const csvRows = [];
-        csvRows.push(['Index', 'Value']); // Header row
+        csvRows.push(['Index', 'Value']);
 
         dataPoints.forEach((point, index) => {
             csvRows.push([index, point.toFixed(2)]);
@@ -147,11 +140,25 @@ const RosLineGraph = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
         a.click();
         URL.revokeObjectURL(url);
     };
+    const handleTopicChange = () => {
+        if (listener) listener.unsubscribe();
+        handleListener();
+    };
 
     return (
         <div style={{ border: '1px solid black', padding: '10px' }}>
             <h2>Line Graph</h2>
-            <canvas ref={canvasRef} width={600} height={400} style={{ border: '1px solid black' }} />
+            <div>
+                <input
+                    type="text"
+                    placeholder="Topic name"
+                    value={tpc}
+                    onChange={(e) => setTopic(e.target.value)}
+                    style={{ marginRight: '10px' }}
+                />
+                <button onClick={handleTopicChange}>Update Topic</button>
+            </div>
+            <canvas ref={canvasRef} style={{ border: '1px solid black', width: '100%', height: '100%' }} />
             <button onClick={downloadCSV} style={{ marginTop: '10px' }}>Download CSV</button>
         </div>
     );

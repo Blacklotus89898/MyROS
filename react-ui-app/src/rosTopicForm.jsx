@@ -1,34 +1,33 @@
 import React, { useState } from 'react';
 
+// parent callback function passed as onMessageReceived
 const RosTopicForm = ({ onMessageReceived }) => {
-  const [topicName, setTopicName] = useState('');
-  const [messageType, setMessageType] = useState('');
+  const [topicName, setTopicName] = useState('ui_topic');
+  const [messageType, setMessageType] = useState('std_msgs/String');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Trigger the callback function to notify the parent component
     if (onMessageReceived) {
       onMessageReceived({ topicName, messageType });
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div style={{ border: '1px solid black', padding: '10px', flex:'1 1 200px'}}>
+      <form onSubmit={handleSubmit} style={{display:'flex', justifyContent:'space-around'}}>
         <div>
           <label>
-            Topic Name:
+            Topic Name: 
+            </label>
             <input
               type="text"
               value={topicName}
               onChange={(e) => setTopicName(e.target.value)}
               placeholder="/ui_topic"
             />
-          </label>
-        </div>
-        <div>
+            <hr />
           <label>
-            Message Type:
+            Message Type: 
             <input
               type="text"
               value={messageType}

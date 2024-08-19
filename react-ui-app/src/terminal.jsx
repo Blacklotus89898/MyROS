@@ -1,11 +1,10 @@
-// requires the server.js running 
+// requires the terminal_web_app/server.js running 
 // or just publish and subscribe ot the terminal node controller
 import React, { useState, useEffect, useRef } from 'react';
 
 const Terminal = () => {
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
-  const inputRef = useRef(null);
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const Terminal = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '50vh', fontFamily: 'Arial, sans-serif' }}>
       <div style={{ flex: 1, padding: '10px', backgroundColor: '#000', color: '#0f0', overflowY: 'auto', whiteSpace: 'pre-wrap' }}>
         {output}
       </div>
@@ -62,6 +61,7 @@ const Terminal = () => {
         onKeyDown={handleKeyDown}
         style={{ padding: '10px', border: 'none', backgroundColor: '#333', color: '#fff', fontFamily: 'monospace', fontSize: '16px', outline: 'none' }}
         autoFocus
+        placeholder='Enter command'
       />
     </div>
   );

@@ -24,8 +24,6 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
     }, [frequencyData]);
 
     const handleListener = () => {
-        if (listener) listener.unsubscribe();
-
         const newListener = new ROSLIB.Topic({
             ros: ros,
             name: tpc,
@@ -125,18 +123,26 @@ const RosHistogram = ({ topic = '/ui_topic', type = 'std_msgs/Float32MultiArray'
         URL.revokeObjectURL(url);
     };
 
+    const handleTopicChange = () => {
+        // Reinitialize the listener with the new topic
+        if (listener) listener.unsubscribe();
+        handleListener();
+    };
+
     return (
         <div style={{ border: '1px solid black', padding: '10px' }}>
             <h2>Histogram</h2>
-            <h3>
+            <div>
                 <input
                     type="text"
                     placeholder="Topic name"
                     value={tpc}
                     onChange={(e) => setTopic(e.target.value)}
+                    style={{ marginRight: '10px' }}
                 />
-            </h3>
-            <canvas ref={canvasRef} width={600} height={400} style={{ border: '1px solid black' }} />
+                <button onClick={handleTopicChange}>Update Topic</button>
+            </div>
+            <canvas ref={canvasRef} width={600} height={400} style={{ border: '1px solid black', width: '100%', height: '100%' }} />
             <button onClick={downloadCSV} style={{ marginTop: '10px' }}>Download CSV</button>
         </div>
     );

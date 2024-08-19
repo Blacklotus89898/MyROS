@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ROSLIB from 'roslib';
 import { useRos } from './rosContext';
 
 const RosStatus = () => {
     const { ros, connection } = useRos();
     const [status, setStatus] = useState('');
+    const [show, setShowStatus] = useState(false);
 
     useEffect(() => {
         if (ros && connection) {
@@ -12,11 +12,26 @@ const RosStatus = () => {
         }
     }, [ros, connection]);
 
+    const statusColor = status === 'Connected' ? 'green' : 'red';
+
+    const toggleStatus = () => {
+        setShowStatus(prevState => !prevState);
+    };
+
     return (
-        <div>
-            <h1>ROS Web Interface</h1>
-            <h2>The ROS connection status: {status}</h2>
-            {ros ? <h2>The ROS connection sddktatus: {JSON.stringify(ros._events)}</h2> : <h2>Ros is Null</h2>}
+        <div style={{ border: '0px solid black', padding: '10px' }}>
+            <h1>Ros Status</h1>
+            <h2 >The ROS connection status:
+                <b style={{ color: statusColor }} >
+                    {status}
+                </b>
+            </h2>
+            <button onClick={toggleStatus}> {show ? 'Hide Detail' : 'Show Info'}</button>
+            {show &&
+                <div>
+                    {ros ? <h4>Details: {JSON.stringify(ros)}</h4> : <h4>ROS context is null</h4>}
+                </div>
+            }
         </div>
     );
 };

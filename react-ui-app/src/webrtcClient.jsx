@@ -16,7 +16,6 @@ const waitForIceGatheringComplete = (pc) => {
     }
   });
 };
-
 const VideoFeed = () => {
   const [pc, setPc] = useState(null);
   const [error, setError] = useState(null);
@@ -92,12 +91,12 @@ const VideoFeed = () => {
   };
 
   return (
-    <div>
+    <div style={{ border: '1px solid black', padding: '10px' }}>
       <h2>Camera Feed Webrtc</h2>
       <video
         ref={videoElementRef}
         autoPlay
-        style={{ border: '1px solid black', width: '640px', height: '480px' }}
+        style={{ border: '1px solid black', width: '100%', height: '100%' }}
       />
       {error && <div style={{ color: 'red' }}>{`Error: ${error}`}</div>}
       <button onClick={start}>Start</button>
