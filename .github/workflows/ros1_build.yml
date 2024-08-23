@@ -19,7 +19,7 @@ jobs:
       - name: Set up ROS 1 Noetic
         run: |
           sudo apt update
-          sudo apt install -y curl gnupg2 lsb-release
+          sudo apt install -y curl gnupg lsb-release
           sudo curl -sSL http://repo.ros.org/repos.key | sudo apt-key add -
           echo "deb [arch=amd64] http://packages.ros.org/ros/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
           sudo apt update
