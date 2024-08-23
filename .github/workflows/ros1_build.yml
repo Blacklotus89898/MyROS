@@ -19,9 +19,17 @@ jobs:
       - name: Set up ROS 1 Noetic
         run: |
           sudo apt update
-          sudo apt install -y curl gnupg lsb-release
-          sudo curl -sSL http://repo.ros.org/repos.key | sudo apt-key add -
+          sudo apt install -y wget gnupg lsb-release
+          
+          # Download and add the ROS 1 GPG key
+          wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc
+          sudo apt-key add ros.asc
+          rm ros.asc
+          
+          # Add the ROS repository to the sources list
           echo "deb [arch=amd64] http://packages.ros.org/ros/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
+          
+          # Install ROS Noetic
           sudo apt update
           sudo apt install -y ros-noetic-desktop-full
 
