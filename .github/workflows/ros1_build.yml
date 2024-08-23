@@ -31,7 +31,7 @@ jobs:
           
           # Install ROS Noetic
           sudo apt update
-          sudo apt install -y ros-noetic-desktop-full
+          sudo apt install -y ros-noetic-desktop
 
       - name: Install dependencies
         run: |
