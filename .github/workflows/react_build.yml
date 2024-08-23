@@ -1,0 +1,45 @@
+name: Build React App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify the Node.js version you need
+
+      - name: Install dependencies
+        working-directory: ./react-ui-app
+        run: |
+          npm install
+
+      - name: Run React app
+        working-directory: ./react-ui-app
+        run: |
+          npm start &
+          # Wait for the app to be ready or some condition
+          sleep 30  # Adjust sleep time based on how long it takes for your app to be ready
+
+      - name: Build React app
+        working-directory: ./react-ui-app
+        run: |
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./react-ui-app/build  # Adjust if your build output is in a different directory
