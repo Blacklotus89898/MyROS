@@ -20,12 +20,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y wget gnupg lsb-release
-          
+
           # Download and add the ROS 1 GPG key
           wget https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc
           sudo apt-key add ros.asc
           rm ros.asc
-          
+
           # Add the ROS repository to the sources list
           echo "deb [arch=amd64] http://packages.ros.org/ros/ubuntu focal main" | sudo tee /etc/apt/sources.list.d/ros-latest.list
           
@@ -37,6 +37,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y python3-catkin-tools python3-pip
+          sudo apt install -y libsdl2-dev  # Install SDL2 development files
           python3 -m pip install -U setuptools
 
       - name: Source ROS 1 setup script and build
