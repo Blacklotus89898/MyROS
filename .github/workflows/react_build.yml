@@ -33,10 +33,10 @@ jobs:
           # Wait for the app to be ready or some condition
           sleep 30  # Adjust sleep time based on how long it takes for your app to be ready
 
-      - name: Build React app
-        working-directory: ./react-ui-app
-        run: |
-          npm run build
+      # - name: Build React app
+      #   working-directory: ./react-ui-app
+      #   run: |
+      #     npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
